@@ -128,6 +128,32 @@ class ColorBars:
         return ColorBars._generate(**settings)
 
     @staticmethod
+    def custom(
+        resolution: Resolution = Resolution.HD_1080,
+        format: vs.VideoFormat = vs.YUV444P12,
+        hdr: HDR = HDR.SDR,
+        wcg: WCG = WCG.BT709,
+        compatibility: Compatibility = Compatibility.IGNORE_BLANKING,
+        subblack: SubBlack = SubBlack.TRUE,
+        superwhite: SuperWhite = SuperWhite.TRUE,
+        iq: IQ = IQ.NEG_I_POS_Q,
+        halfline: HalfLine = HalfLine.FALSE
+    ) -> vs.VideoNode:
+        """Generate custom color bars."""
+        settings = {
+            "resolution": resolution,
+            "format": format,
+            "hdr": hdr,
+            "wcg": wcg,
+            "compatibility": compatibility,
+            "subblack": subblack,
+            "superwhite": superwhite,
+            "iq": iq,
+            "halfline": halfline
+        }
+        return ColorBars._generate(**settings)
+
+    @staticmethod
     def _generate_settings(preset: Preset, compatibility: Compatibility, subblack: SubBlack, superwhite: SuperWhite, iq: IQ, halfline: HalfLine) -> dict:
         return {
             **preset.value,
