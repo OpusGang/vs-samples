@@ -1,122 +1,110 @@
-from sympy import N
-from vstools import vs, core
+import vapoursynth as vs
+core = vs.core
+import numpy as np
 
-def gradient(height: int = 50) -> vs.VideoNode:
-
-    clip = [core.std.BlankClip(
-        height=1,
-        width=1,
-        format=vs.GRAYS,
-        color=i / 1000,
-        length=1,
-        keep=True
-    ) for i in range(0, 1001)]
-
-    splice = core.std.StackHorizontal(clip)
-    splice = splice.std.SetFrameProp(prop="_ColorRange", intval=vs.ColorRange.RANGE_FULL)
-    splice = splice.resize.Bilinear(height=height)
-
-    return splice
-
-def radial() -> vs.VideoNode:
-    import numpy as np
-
-    def _process_frame(n: int, f: vs.VideoNode) -> vs.VideoFrame:
-        f1 = f
-        fout = f1.copy()
+class NumpyToVideoNode:
+    def __init__(self, width: int, height: int, length: int, format: vs.PresetVideoFormat = vs.GRAYS):
+        self.width = width
+        self.height = height
+        self.length = length
+        self.format = format
         
-        width = f.width
-        height = f.height
-
-        x = np.linspace(-1, 1, width)
-        y = np.linspace(-1, 1, height)
-
-        xx, yy = np.meshgrid(x, y)
-
-        radius = np.sqrt(xx ** 2 + yy ** 2)
-        gradient = np.exp(-n * radius**2)
+        self.planes = 1 if self.format is vs.GRAYS else 3 
+        self.clip = vs.core.std.BlankClip(
+            width=width,
+            height=height,
+            format=self.format,
+            color=[0] * self.planes,
+            length=length
+        )
         
-        np.copyto(np.asarray(fout[0]), gradient)
+    def _process_frame(self, n: int, f: vs.VideoNode) -> vs.VideoFrame:
+        fout = f.copy()
+        
+        ramp = self._generate(n)
+        
+        if fout.format.num_planes == 1:
+            np.copyto(np.asarray(fout[0]), ramp)
+        else:
+            for i in range(fout.format.num_planes):
+                np.copyto(np.asarray(fout[i]), ramp[..., i])
 
         return fout
 
-    clip = core.std.BlankClip(None, 256, 256, format=vs.GRAYS, color=[0.1], length=24)
-    clip = clip.std.ModifyFrame(clip, _process_frame)
+    def _generate(self, n: int) -> np.ndarray:
+        raise NotImplementedError("subclass broken")
+    
+    def generate(self) -> vs.VideoNode:
+        processed_clip = self.clip.std.ModifyFrame(
+            clips=self.clip,
+            selector=self._process_frame
+            )
 
-    return clip
+        return processed_clip
 
-def spiral() -> vs.VideoNode:
-    import numpy as np
+class HorizontalRamp(NumpyToVideoNode):
+    def _generate(self, n: int) -> np.ndarray:
+        ramp = np.linspace(0, 1, self.width)
+        ramp = np.tile(ramp, (self.height, 1))
+        ramp *= n / (self.length - 1)
+        return ramp
 
-    def _process_frame(n: int, f: vs.VideoNode) -> vs.VideoFrame:
-        f1 = f
-        fout = f1.copy()
-        
-        width = f.width
-        height = f.height
+class VerticalRamp(NumpyToVideoNode):
+    def _generate(self, n: int) -> np.ndarray:
+        ramp = np.linspace(0, 1, self.height)
+        ramp = np.repeat(ramp, self.width).reshape(self.height, self.width)
+        ramp *= n / (self.length - 1)
+        return ramp
 
-        x = np.linspace(-10, 10, width)
-        y = np.linspace(-10, 10, height)
+class CornerRamp(NumpyToVideoNode):
+    def _generate(self, n: int) -> np.ndarray:
+        x = np.linspace(0, 1, self.width)
+        y = np.linspace(0, 1, self.height)
+        xx, yy = np.meshgrid(x, y)
+        ramp = xx * yy
+        ramp *= n / (self.length - 1)
+        return ramp
+
+class CircularRamp(NumpyToVideoNode):
+    def _generate(self, n: int) -> np.ndarray:
+        x = np.linspace(-1, 1, self.width)
+        y = np.linspace(-1, 1, self.height)
+        xx, yy = np.meshgrid(x, y)
+        ramp = np.sqrt(xx**2 + yy**2)
+        ramp = (ramp - np.min(ramp)) / (np.max(ramp) - np.min(ramp))
+        ramp *= n / (self.length - 1)
+        return ramp
+
+class Spiral(NumpyToVideoNode):
+    def _generate(self, n: int) -> np.ndarray:
+        x = np.linspace(-10, 10, self.width)
+        y = np.linspace(-10, 10, self.height)
 
         xx, yy = np.meshgrid(x, y)
 
         r = np.sqrt(xx ** 2 + yy ** 2)
-        theta = np.arctan2(yy, xx)
 
-        spiral = np.sin(r + theta)
+        spiral = np.sin(r - n)
         
-        np.copyto(np.asarray(fout[0]), spiral)
+        return spiral
 
-        return fout
-
-    clip = core.std.BlankClip(None, 256, 256, format=vs.GRAYS, color=[0.1], length=24)
-    clip = clip.std.ModifyFrame(clip, _process_frame)
-
-    return clip
-
-def checkerboard() -> vs.VideoNode:
-    import numpy as np
-
-    def _process_frame(n: int, f: vs.VideoNode) -> vs.VideoFrame:
-        f1 = f
-        fout = f1.copy()
-        
-        width = f.width
-        height = f.height
-
-        pattern = np.zeros((height, width))
+class Checkerboard(NumpyToVideoNode):
+    def _generate(self, n: int) -> np.ndarray:
+        pattern = np.zeros((self.height, self.width))
         pattern[::2, ::2] = 1
         pattern[1::2, 1::2] = 1
         
-        np.copyto(np.asarray(fout[0]), pattern)
+        return pattern
 
-        return fout
+class RotatingBandingGradients(NumpyToVideoNode):
+    def __init__(self, width: int, height: int, length: int):
+        super().__init__(width, height, length, format=vs.RGBS)
 
-    clip = core.std.BlankClip(None, 256, 256, format=vs.GRAYS, color=[0.1], length=1000)
-    clip = clip.std.ModifyFrame(clip, _process_frame)
-
-    return clip
-
-def rotating_banding_gradients() -> vs.VideoNode:
-    import numpy as np
-    def _process_frame(n: int, f: vs.VideoNode) -> vs.VideoFrame:
-        f1 = f
-        fout = f1.copy()
-        
-        width = f.width
-        height = f.height
-
-        x = np.linspace(-1, 1, width)
-        y = np.linspace(-1, 1, height)
+    def _generate(self, n: int, format=vs.RGBS) -> np.ndarray:
+        x = np.linspace(-1, 1, self.width)
+        y = np.linspace(-1, 1, self.height)
 
         xx, yy = np.meshgrid(x, y)
-
-        colors = np.array([
-            [1, 0, 0],
-            [0, 1, 0],
-            [0, 0, 1],
-            [1, 1, 0]
-        ])
 
         angle = n * np.pi / 180
 
@@ -131,15 +119,20 @@ def rotating_banding_gradients() -> vs.VideoNode:
         else:
             n = peak_n * (num_frames - n) / (num_frames - peak_frame)
         
-        # TODO pre-calc
-        center_x = 0.5 * np.sin(angle + np.array([
-            0, np.pi / 2, np.pi, 3 * np.pi / 2
-        ]))
+        c = n / 10
 
-        center_y = 0.5 * np.cos(angle + np.array([
-            0, np.pi / 2, np.pi, 3 * np.pi / 2
-        ]))
-        
+        colors = np.array([
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0, 1],
+            [1, 1, 1]
+        ])
+
+        angle_array = angle + np.array([0, np.pi / 2, np.pi, 3 * np.pi / 2])
+
+        center_x = c / 3 * np.sin(angle_array)
+        center_y = c / 3 * np.cos(angle_array)
+
         radius = np.sqrt((xx[:, :, np.newaxis] - center_x)**2 + (yy[:, :, np.newaxis] - center_y)**2)
         
         gradient = np.exp(-n * radius**2)
@@ -147,44 +140,7 @@ def rotating_banding_gradients() -> vs.VideoNode:
         rgb_gradient = gradient[:, :, :, np.newaxis] * colors
         
         rgb_gradient = np.sum(rgb_gradient, axis=2)
+
+        rgb_gradient = (rgb_gradient - np.min(rgb_gradient)) / (np.max(rgb_gradient) - np.min(rgb_gradient) + 1e-8)
         
-        rgb_gradient = (rgb_gradient - np.min(rgb_gradient)) / (np.max(rgb_gradient) - np.min(rgb_gradient))
-        rgb_gradient = np.transpose(rgb_gradient, (2, 0, 1))
-
-        for plane in range(fout.format.num_planes):
-            np.copyto(np.asarray(fout[plane]), rgb_gradient[plane])
-
-        return fout
-
-    clip = core.std.BlankClip(None, 256, 256, format=vs.RGBS, length=240)
-    clip = clip.std.ModifyFrame(clip, _process_frame)
-
-    return clip
-
-def spiral2() -> vs.VideoNode:
-    import numpy as np
-
-    def _process_frame(n: int, f: vs.VideoNode) -> vs.VideoFrame:
-        f1 = f
-        fout = f1.copy()
-        
-        width = f.width
-        height = f.height
-
-        x = np.linspace(-1, 1, width)
-        y = np.linspace(-1, 1, height)
-
-        xx, yy = np.meshgrid(x, y)
-
-        radius_tl = np.sqrt((xx + 0.5)**2 + (yy + 0.5)**2)
-        angle_tl = np.arctan2(yy + 0.5, xx + 0.5) + n * np.pi / 180
-        gradient_tl = np.sin(radius_tl * 5 + angle_tl)
-
-        np.copyto(np.asarray(fout[0]), gradient_tl)
-
-        return fout
-
-    clip = core.std.BlankClip(None, 256, 256, format=vs.GRAYS, color=[0.1], length=1000)
-    clip = clip.std.ModifyFrame(clip, _process_frame)
-
-    return clip
+        return rgb_gradient
