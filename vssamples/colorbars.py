@@ -1,5 +1,6 @@
 from enum import Enum
-from vstools import vs, core
+import vapoursynth as vs
+core = vs.core
 from .enums import Compatibility, HalfLine, HDR, IQ, Resolution, SubBlack, SuperWhite, WCG
 
 class ColorBars:

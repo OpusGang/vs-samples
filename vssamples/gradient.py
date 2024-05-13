@@ -96,6 +96,18 @@ class Checkerboard(NumpyToVideoNode):
         
         return pattern
 
+class Diamond(NumpyToVideoNode):
+    def _generate(self, n: int) -> np.ndarray:
+        x = np.linspace(-1, 1, self.width)
+        y = np.linspace(-1, 1, self.height)
+        xx, yy = np.meshgrid(x, y)
+        
+        gradient = 1 - np.abs(xx) - np.abs(yy)
+        gradient = np.clip(gradient, 0, 1)
+        gradient *= n / (self.length - 1)
+        
+        return gradient
+
 class RotatingBandingGradients(NumpyToVideoNode):
     def __init__(self, width: int, height: int, length: int):
         super().__init__(width, height, length, format=vs.RGBS)
@@ -144,3 +156,28 @@ class RotatingBandingGradients(NumpyToVideoNode):
         rgb_gradient = (rgb_gradient - np.min(rgb_gradient)) / (np.max(rgb_gradient) - np.min(rgb_gradient) + 1e-8)
         
         return rgb_gradient
+
+class Vortex(NumpyToVideoNode):
+    def __init__(self, width: int, height: int, length: int):
+        super().__init__(width, height, length, format=vs.RGBS)
+    
+    def _generate(self, n: int) -> np.ndarray:
+        x = np.linspace(-1, 1, self.width)
+        y = np.linspace(-1, 1, self.height)
+        xx, yy = np.meshgrid(x, y)
+        
+        angle = np.arctan2(yy, xx)
+        radius = np.sqrt(xx**2 + yy**2)
+        
+        vortex_r = np.sin(angle * 5 + radius * 10 - n / 10)
+        vortex_g = np.sin(angle * 5 + radius * 10 - n / 10 + 2 * np.pi / 3)
+        vortex_b = np.sin(angle * 5 + radius * 10 - n / 10 + 4 * np.pi / 3)
+        
+        vortex = np.stack((vortex_r, vortex_g, vortex_b), axis=-1)
+        vortex = (vortex + 1) / 2
+        vortex *= n / (self.length - 1)
+        
+        mask = np.exp(-radius**2 * 5)
+        vortex *= mask[..., np.newaxis]
+
+        return vortex
