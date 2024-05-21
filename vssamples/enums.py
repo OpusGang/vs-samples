@@ -2,25 +2,131 @@ from enum import IntEnum
 
 class Resolution(IntEnum):
     NTSC_BT601 = 0
+    """
+    Resolution: 720x486
+
+    Compatibility:
+    - Y'CbCr SDR: Yes
+    - Y'CbCr HDR: No
+    - RGB SDR: No
+    - RGB HDR: No
+    - Color Gamut: BT.709
+    """
     PAL_BT601 = 1
+    """
+    Resolution: 720x576
+
+    Compatibility:
+    - Y'CbCr SDR: Yes
+    - Y'CbCr HDR: No
+    - RGB SDR: No
+    - RGB HDR: No
+    - Color Gamut: BT.709
+    """
     HD_720P = 2
+    """
+    Resolution: 1280x720
+
+    Compatibility:
+    - Y'CbCr SDR: Yes
+    - Y'CbCr HDR: No
+    - RGB SDR: No
+    - RGB HDR: No
+    - Color Gamut: BT.709
+    """
     HD_1080 = 3
+    """
+    Resolution: 1920x1080
+
+    Compatibility:
+    - Y'CbCr SDR: Yes
+    - Y'CbCr HDR: No
+    - RGB SDR: No
+    - RGB HDR: Yes
+    - Color Gamut: BT.709, BT.2020
+    """
     UHD_2K = 4
+    """
+    Resolution: 2048x1080
+
+    Compatibility:
+    - Y'CbCr SDR: Yes
+    - Y'CbCr HDR: No
+    - RGB SDR: No
+    - RGB HDR: Yes
+    - Color Gamut: BT.709, BT.2020
+    """
     UHD_4K = 5
+    """
+    AKA UHDTV1
+    Resolution: 3840x2160
+
+    Compatibility:
+    - Y'CbCr SDR: Yes
+    - Y'CbCr HDR: No
+    - RGB SDR: No
+    - RGB HDR: Yes
+    - Color Gamut: BT.709, BT.2020
+    """
     UHD_4K_DCI = 6
+    """
+    Resolution: 4096x2160
+
+    Compatibility:
+    - Y'CbCr SDR: Yes
+    - Y'CbCr HDR: No
+    - RGB SDR: No
+    - RGB HDR: Yes
+    - Color Gamut: BT.2020
+    """
     UHD_8K = 7
+    """
+    AKA UHDTV2
+    Resolution: 7680x4320
+
+    Compatibility:
+    - Y'CbCr SDR: Yes
+    - Y'CbCr HDR: No
+    - RGB SDR: No
+    - RGB HDR: Yes
+    - Color Gamut: BT.2020 (Required for 8K, although ColorBars does not enforce this and will generate 8K Rec.709 with a warning)
+    """
     NTSC_4FSC = 8
+    """
+    Resolution: 768x486
+
+    Compatibility:
+    - Y'CbCr SDR: Yes
+    - Y'CbCr HDR: No
+    - RGB SDR: No
+    - RGB HDR: No
+    - Color Gamut: BT.709
+    """
     PAL_4FSC = 9
+    """
+    Resolution: 948x576
+
+    Compatibility:
+    - Y'CbCr SDR: Yes
+    - Y'CbCr HDR: No
+    - RGB SDR: No
+    - RGB HDR: No
+    - Color Gamut: BT.709
+    """
 
 
-class HDR(IntEnum):
+class EOTF(IntEnum):
     SDR = 0
+    """ITU BT.709"""
     HLG = 1
+    """ARIB STD-B67 (BT.2100)"""
     PQ = 2
+    """SMPTE ST 2084 (BT.2100)"""
     PQ_FULL_RANGE = 3
+    """SMPTE ST 2084 (BT.2100)"""
 
 
-class WCG(IntEnum):
+class Gamut(IntEnum):
     """
     Enable ITU-R BT.2020, aka wide color gamut. Only valid with UHD and higher resolutions. Required for 8K, although ColorBars does not enforce this and will generate 8K Rec.709 with a warning. No effect when hdr > 0.
     """
