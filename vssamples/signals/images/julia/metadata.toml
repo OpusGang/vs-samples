@@ -1,0 +1,268 @@
+#
+# An easy image database
+#
+# the key has to match the filename
+# then one can use the sub fields
+#
+# name     - filename without extension in the images directory
+# fullname - displayed name for the image
+# author   – original author (if known)
+# url      - origin url (if known)
+# license  - license
+#
+# none of these fields is required.
+
+[[images]]
+name = "airplaneF16"
+fullname = "Airplane (F-16)"
+url = "http://sipi.usc.edu/database/download.php?vol=misc&img=4.2.05"
+author = "USC-SIPI Image Database"
+
+[[images]]
+name = "autumn_leaves"
+fullname = "Autum Leaves"
+url = "http://www.imagemagick.org/Usage/images/autumn_leaves.png"
+
+[[images]]
+name = "chelsea"
+fullname = "Chelsea"
+url = "https://github.com/scikit-image/scikit-image/blob/d254263605c6c173c563258d51f44e65782d4365/skimage/data/chelsea.png"
+author = "Stefan van der Walt"
+
+[[images]]
+name = "coffee"
+fullname = "coffee"
+url = "https://github.com/scikit-image/scikit-image/blob/d254263605c6c173c563258d51f44e65782d4365/skimage/data/coffee.png"
+author = "Rachel Michetti"
+
+[[images]]
+name = "earth_apollo17"
+url = "http://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg"
+
+[[images]]
+name = "lake_color"
+fullname = "Sailboat on lake"
+url = "http://sipi.usc.edu/database/database.php?volume=misc&image=12#top"
+
+[[images]]
+name = "lena_gray_512"
+url = "http://www.ece.rice.edu/~wakin/images/lenaTest3.jpg"
+
+[[images]]
+name = "lilly"
+fullname = "lilly"
+url = "https://zenodo.org/record/8091212"
+author = "Julian Samaroo"
+
+[[images]]
+name = "lighthouse"
+url = "http://r0k.us/graphics/kodak/kodak/kodim21.png"
+
+[[images]]
+name = "mandril_color"
+url = "http://sipi.usc.edu/database/database.php?volume=misc&image=10#top"
+
+[[images]]
+name = "morphology_test_512"
+url = "https://gist.github.com/ashwani-rathee/a835ea20bb522d35e7441978686a1951"
+author = "Ashwani Rathee"
+
+[[images]]
+name = "mountainstream"
+url = "http://r0k.us/graphics/kodak/kodak/kodim13.png"
+
+[[images]]
+name = "peppers_color"
+fullname = "Peppers (color)"
+url = "http://sipi.usc.edu/database/database.php?volume=misc&image=13#top"
+
+[[images]]
+name = "pirate"
+url = "http://sipi.usc.edu/database/database.php?volume=misc&image=23#top"
+
+[[images]]
+name = "simple_3d_psf"
+fullname = "A simple 3D point spread function of a circular aperture (64pixel in each dimension)"
+author = "Rainer Heintzmann"
+
+[[images]]
+name = "resolution_test_1920"
+fullname = "Resolution test chart (1920 pixel)"
+url = "https://www.osapublishing.org/oe/abstract.cfm?uri=oe-21-2-2032"
+author = "Kai Wicker"
+
+[[images]]
+name = "resolution_test_512"
+fullname = "Resolution test chart (512 pixel)"
+url = "https://www.osapublishing.org/oe/abstract.cfm?uri=oe-21-2-2032"
+author = "Kai Wicker"
+
+[[images]]
+name = "simple_3d_ball"
+fullname = "A 3D test image of a ball with some extra structure (64pixel in each dimension)"
+author = "Rainer Heintzmann"
+
+[[images]]
+name = "sudoku"
+fullname = "Sudoku image"
+author = "Ashwani Rathee"
+
+[[images]]
+name = "walkbridge"
+url = "http://sipi.usc.edu/database/database.php?volume=misc&image=22#top"
+
+[[images]]
+name = "bark_512"
+fullname = "Brodatz - Bark (D12)"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "beach_sand_512"
+fullname = "Brodatz - Beach sand (D29)"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "brick_wall_512"
+fullname = "Brodatz - Brick wall (D94)"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "grass_512"
+fullname = "Brodatz - Grass (D9)"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "herringbone_weave_512"
+fullname = "Brodatz - Herringbone weave (D15)"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "pigskin_512"
+fullname = "Brodatz - Pigskin (D92)"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "plastic_bubbles_512"
+fullname = ""
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "calf_leather_512"
+fullname = "Brodatz - Pressed calf leather (D24)"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "raffia_512"
+fullname = "Brodatz - Raffia (D84)"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "straw_512"
+fullname = "Brodatz - Plastic bubbles (D112)"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "water_512"
+fullname = "Brodatz - Water (D38)"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "wood_grain_512"
+fullname = "Brodatz - Wood grain (D68)"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "woolen_cloth_512"
+fullname = "Brodatz - Woolen cloth (D19)"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "bark_he_512"
+fullname = "Brodatz - Bark (D12) Histogram Equalized"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "beach_sand_he_512"
+fullname = "Brodatz - Beach sand (D29) Histogram Equalized"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "brick_wall_he_512"
+fullname = "Brodatz - Brick wall (D94) Histogram Equalized"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "grass_he_512"
+fullname = "Brodatz - Grass (D9) Histogram Equalized"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "herringbone_weave_he_512"
+fullname = "Brodatz - Herringbone weave (D15) Histogram Equalized"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "pigskin_he_512"
+fullname = "Brodatz - Pigskin (D92) Histogram Equalized"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "plastic_bubbles_he_512"
+fullname = "Brodatz - Plastic bubbles (D112) Histogram Equalized"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "calf_leather_he_512"
+fullname = "Brodatz - Pressed calf leather (D24) Histogram Equalized"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "raffia_he_512"
+fullname = "Brodatz - Raffia (D84) Histogram Equalized"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "straw_he_512"
+fullname = "Brodatz - Plastic bub Histogram Equalizedbles (D112)"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "water_he_512"
+fullname = "Brodatz - Water (D38) Histogram Equalized"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "wood_grain_he_512"
+fullname = "Brodatz - Wood grain (D68) Histogram Equalized"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
+
+[[images]]
+name = "woolen_cloth_he_512"
+fullname = "Brodatz - Woolen cloth (D19) Histogram Equalized"
+author = "Phil Brodatz"
+url = "https://sipi.usc.edu/database/database.php?volume=textures"
